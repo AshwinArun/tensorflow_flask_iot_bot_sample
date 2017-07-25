@@ -1,0 +1,64 @@
+
+<html>
+<head>
+<title>Chat Bot</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+</head>
+<body>
+
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+
+    $('#messages li:nth-child(odd)').addClass('alternate');
+    
+	var socket = io.connect('http://127.0.0.1:5000');
+	socket.on('connect', function() {
+		socket.send('user_connected');
+	});
+
+	socket.on('message', function(msg) {
+	$("#messages").append('<li><font color = "red"><b>AI :</b>'+msg+'</font></li>');
+        var speech = new SpeechSynthesisUtterance(msg);
+        speech.lang = 'en-GB';
+        speech.pitch = 0;
+        speech.voiceURI = 'Google UK English Male';
+        window.speechSynthesis.speak(speech);       
+		console.log('Received message');
+
+        
+	});
+	$('#sendbutton').on('click', function() {
+		socket.send($('#myMessage').val());
+		$("#messages").append('<li><font color = "blue"><b>You: </b>'+$('#myMessage').val()+'</font></li>');
+		$('#myMessage').val('');
+	});
+            
+    	$('#recordvoice').on('click', function() {
+                
+        var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+        recognition.start();                
+        recognition.onresult = function(event) {
+	$("#messages").append('<li><font color = "blue"><b>You :</b>'+event.results[0][0].transcript+'</font></li>');
+        socket.send(event.results[0][0].transcript);
+        console.log('You said: ', event.results[0][0].transcript);
+        
+    };
+	});
+            
+});
+</script>
+<div class="jumbotron" align = "center">
+    <ul id="messages"></ul>
+    <input type="text" id="myMessage" x-webkit-speech>
+    <button id="sendbutton">Send</button>
+    <button id="recordvoice">Record</button>
+</div>
+</body>
+</html>

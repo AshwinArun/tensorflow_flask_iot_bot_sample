@@ -1,0 +1,43 @@
+{"intents": [
+        {"tag": "greeting",
+         "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day"],
+         "responses": ["Hello :)", "Good day", "Hi, How can I help you?"]
+        },
+        {"tag": "goodbye",
+         "patterns": ["Bye", "See you later", "Goodbye"],
+         "responses": ["See you later!", "Have a nice day :)", "Goodbye!"]
+        },
+        {"tag": "thanks",
+         "patterns": ["Thanks", "Thank you", "That's helpful"],
+         "responses": ["Happy to help!", "Any time!", "My pleasure"]
+        },
+        {"tag": "lights_on",
+         "patterns": ["Turn on the lights", "Switch on the lights please", "It is very dark in here" ],
+         "responses": ["Turning on the lights"],
+	 "context_set":"lights_on"
+        },
+        {"tag": "lights_off",
+         "patterns": ["Turn off the lights", "Switch off the lights please", "It is too bright in here" ],
+         "responses": ["Turning off the lights"],
+	 "context_set":"lights_off"
+        },
+        {"tag": "thermostat_higher",
+         "patterns": ["It is cold in here", "I'm freezing", "Can we have the heat up?", "Raise the temperature please" ],
+         "responses": ["Increasing room temperature"]
+        },
+        {"tag": "thermostat_lower",
+         "patterns": ["It is warm in here", "It is hot", "lower the temperature please"],
+         "responses": ["Decreasing room temperature"]
+        },
+        {"tag": "call_someone",
+         "patterns": ["call", "make a call"],
+         "responses": ["who do you want to call?"],
+         "context_set": "call_mode"
+        },
+        {"tag": "calling ..",
+         "patterns": ["12345","6789"],
+         "responses": ["Calling"],
+         "context_filter": "call_mode"
+        }
+   ]
+}
